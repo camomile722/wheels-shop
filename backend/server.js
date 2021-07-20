@@ -25,9 +25,9 @@ if (process.env.NODE_ENV === 'development') {
 //allows json data in request sbody postman
 app.use(express.json())
 
-app.get('/', (req, res) => {
-  res.send('API is running...')
-})
+// app.get('/', (req, res) => {
+//   res.send('API is running...')
+// })
 
 app.use('/api/products', productRoutes)
 
@@ -36,15 +36,29 @@ app.use('/api/users', userRoutes)
 app.use('/api/orders', orderRoutes)
 app.use('/api/upload', uploadRoutes)
 
-// making a uploads folder static with express
 
-const __dirname = path.resolve()
-app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
 
 //send PAYPAL_CLIENT_ID = from ENV
 app.get('/api/config/paypal', (req, res) =>
   res.send(process.env.PAYPAL_CLIENT_ID)
 )
+// making a uploads folder static with express
+const __dirname = path.resolve()
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
+
+// prepare to deploy if production mode - use static folder build and schow us index.html file
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '/frontend/build')))
+
+  app.get('*', (req, res) =>
+    res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'))
+  )
+} else {
+  app.get('/', (req, res) => {
+    res.send('API is running....')
+  })
+}
+
 
 app.use(notFound)
 
