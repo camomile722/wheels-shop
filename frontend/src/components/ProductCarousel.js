@@ -22,18 +22,27 @@ const ProductCarousel = () => {
     <Message variant='danger'>{error}</Message>
   ) : (
     <>
-      <h2>TOP Bewertete Felgen</h2>
-      <Carousel pause='hover' className='bg-dark'>
+      
+      <Carousel pause='hover'>
         {products.map((product) => (
-          <Carousel.Item key={product._id}>
+          <Carousel.Item 
+          key={product._id}
+          style={{
+            backgroundImage: `url(${product.image})`,
+            backgroundPosition: 'center',
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat'}}
+          >
             <Link to={`/product/${product._id}`}>
-              <Image src={product.image} alt={product.name} fluid />
-              <Carousel.Caption className='carousel-caption'>
+              {/* <Image src={product.image} alt={product.name} fluid /> */}
+    
+              {/* <Carousel.Caption className='carousel-caption'>
                 <h4 className='caption-color'>
                   {product.name} (€{product.price})
                 </h4>
-              </Carousel.Caption>
+              </Carousel.Caption> */}
             </Link>
+            <h2>TOP Bewertete Felgen</h2>
           </Carousel.Item>
         ))}
       </Carousel>
